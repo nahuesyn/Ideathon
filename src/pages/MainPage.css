@@ -1,0 +1,494 @@
+/* ── 전체 레이아웃 (Grid) ── */
+.main-root {
+  display: grid;
+  grid-template-rows: 60px 1fr;
+  grid-template-columns: 192px 1fr;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
+}
+
+/* ════════════════════════
+   HEADER
+════════════════════════ */
+.main-header {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-bottom: 1px solid #e8eaf6;
+  padding: 0 24px 0 0;
+  gap: 0;
+  z-index: 10;
+}
+
+/* 헤더 좌측: 로고 영역 (사이드바 너비와 동일) */
+.main-header-logo {
+  width: 192px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  background: #9BAAF5;
+  height: 100%;
+}
+
+.main-header-logo svg {
+  width: 28px;
+  height: 28px;
+}
+
+.main-header-logo-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 10px;
+}
+
+.main-header-logo-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* 헤더 중앙: 인사 */
+.main-header-greeting {
+  flex: 1;
+  padding: 0 24px;
+}
+
+.main-header-greeting h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1f5e;
+  line-height: 1.3;
+}
+
+.main-header-greeting p {
+  font-size: 12px;
+  color: #9AA0C8;
+  margin-top: 2px;
+}
+
+/* 헤더 우측: 알림 + 유저 */
+.main-header-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.main-header-bell {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  color: #9AA0C8;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.main-header-bell:hover {
+  background: #f0f2ff;
+}
+
+.main-header-bell-dot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+}
+
+.main-header-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #d0d5f0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.main-header-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.main-header-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.main-header-user-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1f5e;
+}
+
+.main-header-user-sub {
+  font-size: 11px;
+  color: #9AA0C8;
+  white-space: nowrap;
+}
+
+/* ════════════════════════
+   SIDEBAR
+════════════════════════ */
+.main-sidebar {
+  grid-column: 1;
+  grid-row: 2;
+  background: #9BAAF5;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 24px;
+}
+
+/* 프로필 */
+.sidebar-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 16px;
+  gap: 6px;
+}
+
+.sidebar-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #d4d9f8;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  margin-bottom: 6px;
+}
+
+.sidebar-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sidebar-profile-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1f5e;
+}
+
+.sidebar-profile-name button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #6B7EE8;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-profile-status {
+  font-size: 11px;
+  color: rgba(26, 31, 94, 0.6);
+  text-align: center;
+  line-height: 1.5;
+  padding: 0 8px;
+}
+
+/* 구분선 */
+.sidebar-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 8px 16px;
+}
+
+/* 미니 캘린더 */
+.sidebar-calendar {
+  padding: 8px 12px 12px;
+}
+
+.sidebar-cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.sidebar-cal-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1a1f5e;
+}
+
+.sidebar-cal-nav {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6B7EE8;
+  font-size: 14px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: background 0.15s;
+}
+
+.sidebar-cal-nav:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.sidebar-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+}
+
+.sidebar-cal-day-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(26, 31, 94, 0.5);
+  text-align: center;
+  padding: 2px 0 4px;
+}
+
+.sidebar-cal-day-label.sat { color: #6B7EE8; }
+.sidebar-cal-day-label.sun { color: #ef4444; }
+
+.sidebar-cal-date {
+  font-size: 10px;
+  text-align: center;
+  padding: 3px 0;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #1a1f5e;
+  transition: background 0.12s;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-cal-date:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.sidebar-cal-date.today {
+  background: #6B7EE8;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 50%;
+}
+
+.sidebar-cal-date.in-week {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 0;
+}
+
+.sidebar-cal-date.week-start { border-radius: 50% 0 0 50%; }
+.sidebar-cal-date.week-end   { border-radius: 0 50% 50% 0; }
+
+.sidebar-cal-date.sat-date { color: #6B7EE8; }
+.sidebar-cal-date.sun-date { color: #ef4444; }
+
+.sidebar-cal-date.empty { cursor: default; }
+
+/* 이벤트 뱃지 */
+.sidebar-event-badge {
+  margin: 8px 12px 0;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 11px;
+  color: #1a1f5e;
+  line-height: 1.5;
+}
+
+.sidebar-event-badge strong {
+  font-weight: 600;
+  display: block;
+  font-size: 10px;
+}
+
+/* 사이드바 네비게이션 */
+.sidebar-nav {
+  padding: 16px 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a1f5e;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.sidebar-nav-item:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.sidebar-nav-item.active {
+  background: rgba(255, 255, 255, 0.55);
+  font-weight: 700;
+}
+
+.sidebar-nav-icon {
+  color: #6B7EE8;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* ════════════════════════
+   MAIN CONTENT
+════════════════════════ */
+.main-content {
+  grid-column: 2;
+  grid-row: 2;
+  background: #F4F5FC;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── 로딩 ── */
+.main-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  color: #9AA0C8;
+  font-size: 13px;
+}
+
+.main-loading-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #dde0f8;
+  border-top-color: #6B7EE8;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 빈 상태 */
+.main-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.main-empty-illust {
+  margin-bottom: 4px;
+}
+
+.main-empty-text {
+  font-size: 15px;
+  color: #9AA0C8;
+  font-weight: 500;
+}
+
+.main-empty-btn {
+  background: #6B7EE8;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.18s, transform 0.1s;
+  letter-spacing: 0.3px;
+}
+
+.main-empty-btn:hover {
+  background: #5B6ED8;
+}
+
+.main-empty-btn:active {
+  transform: scale(0.97);
+}
+
+/* ── 프로젝트 생성 방식 선택 화면 ── */
+.main-create-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+}
+
+.main-create-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1f5e;
+  line-height: 1.4;
+}
+
+.main-create-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 200px;
+}
+
+.main-create-btn {
+  width: 100%;
+  padding: 13px 0;
+  background: #6B7EE8;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+  transition: background 0.18s, transform 0.1s;
+}
+
+.main-create-btn:hover {
+  background: #5B6ED8;
+}
+
+.main-create-btn:active {
+  transform: scale(0.97);
+}
