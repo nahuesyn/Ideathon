@@ -1,0 +1,339 @@
+/* ── 전체 레이아웃 ── */
+.aiq-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
+  background: #F4F5FC;
+}
+
+/* ════════════════════════
+   HEADER (MainPage와 동일 스타일)
+════════════════════════ */
+.aiq-header {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-bottom: 1px solid #e8eaf6;
+  padding: 0 24px 0 0;
+  height: 60px;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.aiq-header-logo {
+  width: 192px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  background: #9BAAF5;
+  height: 100%;
+}
+
+.aiq-logo-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.aiq-logo-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.aiq-header-greeting {
+  flex: 1;
+  padding: 0 24px;
+}
+
+.aiq-header-greeting h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1f5e;
+  line-height: 1.3;
+}
+
+.aiq-header-greeting p {
+  font-size: 12px;
+  color: #9AA0C8;
+  margin-top: 2px;
+}
+
+.aiq-header-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.aiq-bell {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  color: #9AA0C8;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.aiq-bell:hover { background: #f0f2ff; }
+
+.aiq-bell-dot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+}
+
+.aiq-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #d0d5f0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.aiq-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.aiq-user-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1f5e;
+}
+
+.aiq-user-sub {
+  font-size: 11px;
+  color: #9AA0C8;
+  white-space: nowrap;
+}
+
+/* ════════════════════════
+   CONTENT
+════════════════════════ */
+.aiq-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+}
+
+/* ── 질문 스텝 ── */
+.aiq-step {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.aiq-page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1f5e;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.aiq-question {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1a1f5e;
+}
+
+.aiq-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.aiq-badge {
+  background: #6B7EE8;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.aiq-bar {
+  flex: 1;
+  height: 6px;
+  background: #DDE0F8;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.aiq-bar-fill {
+  height: 100%;
+  background: #6B7EE8;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.aiq-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: #EBEBEB;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #1a1f5e;
+  resize: none;
+  outline: none;
+  line-height: 1.7;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.aiq-textarea:focus {
+  background: #f5f6ff;
+  border-color: #6B7EE8;
+}
+
+.aiq-textarea::placeholder { color: #b0b8d8; }
+
+/* ── 버튼 공통 ── */
+.aiq-btns {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.aiq-btn-prev {
+  padding: 12px 28px;
+  background: #9AA0C8;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.aiq-btn-prev:hover { background: #8890b8; }
+
+.aiq-btn-next,
+.aiq-btn-complete {
+  padding: 12px 28px;
+  background: #6B7EE8;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.aiq-btn-next:hover,
+.aiq-btn-complete:hover { background: #5B6ED8; }
+
+.aiq-btn-next:active,
+.aiq-btn-complete:active { transform: scale(0.97); }
+
+.aiq-btn-complete:disabled {
+  background: #b0b8e8;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── 우선순위 배정 ── */
+.aiq-priority {
+  width: 100%;
+  max-width: 660px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.aiq-priority-sub {
+  font-size: 14px;
+  color: #6B7EE8;
+  text-align: center;
+  line-height: 1.7;
+}
+
+.aiq-priority-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+  width: 100%;
+}
+
+.aiq-priority-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px 18px;
+  box-shadow: 0 1px 6px rgba(107, 126, 232, 0.1);
+}
+
+.aiq-priority-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1f5e;
+}
+
+.aiq-priority-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.aiq-priority-input {
+  width: 52px;
+  padding: 6px 8px;
+  background: #EBEBEB;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1f5e;
+  text-align: right;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.aiq-priority-input:focus {
+  background: #f5f6ff;
+  border-color: #6B7EE8;
+}
+
+.aiq-priority-pct {
+  font-size: 13px;
+  font-weight: 700;
+  color: #6B7EE8;
+}

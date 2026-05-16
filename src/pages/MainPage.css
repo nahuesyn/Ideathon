@@ -492,3 +492,81 @@
 .main-create-btn:active {
   transform: scale(0.97);
 }
+
+/* ── 소개 카드 (AI / 직접입력 모달) ── */
+.main-intro-card {
+  position: relative;
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 44px 36px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 4px 24px rgba(107, 126, 232, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.main-intro-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #9AA0C8;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.main-intro-close:hover {
+  background: #f0f2ff;
+  color: #1a1f5e;
+}
+
+.main-intro-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1f5e;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.main-intro-list {
+  background: #F4F5FC;
+  border-radius: 12px;
+  padding: 20px 24px;
+  width: 100%;
+  list-style: disc;
+  padding-left: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.main-intro-list li {
+  font-size: 13px;
+  color: #4a4f7e;
+  line-height: 1.6;
+}
+
+.main-intro-start {
+  background: #6B7EE8;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 13px 52px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.18s, transform 0.1s;
+  letter-spacing: 0.3px;
+}
+
+.main-intro-start:hover { background: #5B6ED8; }
+.main-intro-start:active { transform: scale(0.97); }

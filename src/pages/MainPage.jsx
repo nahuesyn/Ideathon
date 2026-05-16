@@ -170,7 +170,7 @@ function MiniCalendar() {
 /* ════════════════════════════════
    메인 페이지
 ════════════════════════════════ */
-export default function MainPage({ user, onLogout }) {
+export default function MainPage({ user, onLogout, onStartAI }) {
   const [activeNav, setActiveNav] = useState('mandalart')
   const [contentView, setContentView] = useState('empty') // 'empty' | 'create-options' | 'has-planners'
   // TODO: 백엔드 배포 완료 후 useEffect로 plannerAPI.getUserPlanners 연동
@@ -275,9 +275,37 @@ export default function MainPage({ user, onLogout }) {
           <div className="main-create-options">
             <p className="main-create-title">육각형 프로젝트를 어떤 방식으로 만들까요?</p>
             <div className="main-create-btns">
-              <button className="main-create-btn">AI 추천받기</button>
-              <button className="main-create-btn">직접 입력하기</button>
+              <button className="main-create-btn" onClick={() => setContentView('ai-intro')}>AI 추천받기</button>
+              <button className="main-create-btn" onClick={() => setContentView('direct-intro')}>직접 입력하기</button>
             </div>
+          </div>
+        )}
+
+        {contentView === 'ai-intro' && (
+          <div className="main-intro-card">
+            <button className="main-intro-close" onClick={() => setContentView('create-options')} aria-label="닫기">×</button>
+            <h3 className="main-intro-title">AI 추천 육각형 프로젝트 자동설계</h3>
+            <ul className="main-intro-list">
+              <li>AI가 내 상태를 판단하고 육각형 플랜을 자동설계해요.</li>
+              <li>설계 이후 추가적인 수정이 가능해요.</li>
+              <li>1년 단위의 플랜을 빠르게 생성할 수 있어요.</li>
+              <li>구체적인 내용을 작성할 수록 정확한 계획표를 완성할 수 있어요.</li>
+            </ul>
+            <button className="main-intro-start" onClick={onStartAI}>시작</button>
+          </div>
+        )}
+
+        {contentView === 'direct-intro' && (
+          <div className="main-intro-card">
+            <button className="main-intro-close" onClick={() => setContentView('create-options')} aria-label="닫기">×</button>
+            <h3 className="main-intro-title">직접 육각형 프로젝트 입력하기</h3>
+            <ul className="main-intro-list">
+              <li>대/중/소목표 43칸 전부 비어있는 템플릿이 제공돼요.</li>
+              <li>충분한 시간을 두고 자유롭게 계획할 수 있어요.</li>
+              <li>자신에 대해 잘 알고 있다면 작성이 쉬울 수 있어요.</li>
+              <li>언제든지 수정할 수 있어요.</li>
+            </ul>
+            <button className="main-intro-start">시작</button>
           </div>
         )}
       </main>
