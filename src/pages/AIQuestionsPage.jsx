@@ -47,8 +47,8 @@ const CATEGORIES = [
 const TOTAL = 12
 const PRIORITY_STEP = TOTAL + 1
 
-export default function AIQuestionsPage({ user, onComplete, onBack }) {
-  const [step, setStep] = useState(1)
+export default function AIQuestionsPage({ user, onComplete, onBack, startAtPriority = false, onGoMain }) {
+  const [step, setStep] = useState(startAtPriority ? PRIORITY_STEP : 1)
   const [answers, setAnswers] = useState(Array(TOTAL).fill(''))
   const [weights, setWeights] = useState(
     Object.fromEntries(CATEGORIES.map(c => [c.key, '']))
@@ -87,7 +87,7 @@ export default function AIQuestionsPage({ user, onComplete, onBack }) {
   return (
     <div className="aiq-root">
       <header className="aiq-header">
-        <div className="aiq-header-logo">
+        <div className="aiq-header-logo" onClick={onGoMain} style={{cursor:'pointer'}}>
           <img src={logoImg} className="aiq-logo-img" alt="육각형 프로젝트 로고" />
           <span className="aiq-logo-text">육각형 프로젝트</span>
         </div>

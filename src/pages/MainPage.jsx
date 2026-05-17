@@ -168,11 +168,187 @@ function MiniCalendar() {
 }
 
 /* ════════════════════════════════
+   만다라트 뷰어 (색상 적용)
+════════════════════════════════ */
+const MV_S   = 28
+const MV_SC  = 46
+const MV_K   = 3
+const MV_RT3 = Math.sqrt(3)
+const MV_CX  = 240, MV_CY = 255
+
+const MV_OFF = [
+  [0,           -MV_S * MV_RT3      ],
+  [ MV_S * 1.5, -MV_S * MV_RT3 / 2 ],
+  [ MV_S * 1.5,  MV_S * MV_RT3 / 2 ],
+  [0,            MV_S * MV_RT3      ],
+  [-MV_S * 1.5,  MV_S * MV_RT3 / 2 ],
+  [-MV_S * 1.5, -MV_S * MV_RT3 / 2 ],
+]
+
+const MV_HEXES = (() => {
+  const list = []
+  list.push({ x: MV_CX, y: MV_CY, type: 'center', group: -1 })
+  MV_OFF.forEach(([dx, dy], gi) => {
+    const px = MV_CX + dx * MV_K, py = MV_CY + dy * MV_K
+    list.push({ x: px, y: py, type: 'mid', group: gi })
+    MV_OFF.forEach(([sx, sy]) => {
+      list.push({ x: px + sx, y: py + sy, type: 'sub', group: gi })
+    })
+  })
+  return list
+})()
+
+// 각 중목표 시계방향 배치용 텍스트 (mock)
+const MV_MID_LABELS  = ['자격증', '포트폴리오', '진로 코칭', '기업 분석', '체력·멘탈', '대인관계']
+const MV_CENTER_TEXT = '나의 목표'
+
+function MandalartViewer({ onClose }) {
+  const HW = MV_S * 2, HH = MV_S * MV_RT3
+  const CW = MV_SC * 2, CH = MV_SC * MV_RT3
+
+  return (
+    <div className="mview-root">
+      <button className="mview-close" onClick={onClose} aria-label="닫기">×</button>
+      <div className="mview-scroll">
+        <div className="mview-canvas">
+          {MV_HEXES.map((hex, idx) => {
+            const isC = hex.type === 'center'
+            const isM = hex.type === 'mid'
+            const w   = isC ? CW : HW
+            const h   = isC ? CH : HH
+            const col = PRIORITY_COLORS[hex.group]
+
+            let bg, textColor
+            if (isC)       { bg = '#8B9EF5'; textColor = '#fff' }
+            else if (isM)  { bg = col;        textColor = '#fff' }
+            else           { bg = col + '55'; textColor = '#1a1f5e' }
+
+            const label = isC ? MV_CENTER_TEXT
+              : isM ? MV_MID_LABELS[hex.group]
+              : ''
+
+            return (
+              <div key={idx} className="mview-hex"
+                style={{
+                  left: hex.x - w / 2, top: hex.y - h / 2,
+                  width: w, height: h, background: bg,
+                  zIndex: isC ? 3 : isM ? 2 : 1,
+                }}
+              >
+                <span className="mview-text" style={{ color: textColor, fontSize: isC ? 10 : isM ? 8 : 7 }}>
+                  {label}
+                </span>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ════════════════════════════════
+   Mock 데이터 (백엔드 연동 전)
+════════════════════════════════ */
+const PRIORITY_COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#14b8a6']
+
+const MOCK_MID_GOALS = [
+  { title: '자격증',        completion_rate: 65  },
+  { title: '포트폴리오',    completion_rate: 100 },
+  { title: '면접 준비',     completion_rate: 0   },
+  { title: '이력서·서류',   completion_rate: 12  },
+  { title: '기업 분석',     completion_rate: 30  },
+  { title: '체력·멘탈',     completion_rate: 45  },
+].map((g, i) => ({ ...g, color: PRIORITY_COLORS[i] }))
+
+const MOCK_MONTHLY = [
+  { month: '2월', score: 47 },
+  { month: '3월', score: 60 },
+  { month: '4월', score: 73 },
+  { month: '5월', score: 88 },
+]
+
+/* ── 막대그래프 ── */
+function BarChart({ data }) {
+  const max = Math.max(...data.map(d => d.score))
+  return (
+    <div className="dash-bar-chart">
+      {data.map(({ month, score }) => (
+        <div key={month} className="dash-bar-col">
+          <span className="dash-bar-val">{score}</span>
+          <div className="dash-bar-wrap">
+            <div className="dash-bar-fill" style={{ height: `${(score / max) * 100}%` }} />
+          </div>
+          <span className="dash-bar-month">{month}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/* ── 육각형 레이더 차트 ── */
+function RadarChart({ goals, size = 150 }) {
+  const cx = size / 2, cy = size / 2, r = size * 0.38
+  const ANGLES = [-90, -30, 30, 90, 150, 210].map(d => d * Math.PI / 180)
+
+  const pt = (angle, ratio) => [
+    cx + r * ratio * Math.cos(angle),
+    cy + r * ratio * Math.sin(angle),
+  ]
+
+  const bgPts  = ANGLES.map(a => pt(a, 1)).map(p => p.join(',')).join(' ')
+  const dataPts = ANGLES.map((a, i) => pt(a, (goals[i]?.completion_rate ?? 0) / 100)).map(p => p.join(',')).join(' ')
+
+  return (
+    <svg width={size} height={size} style={{ overflow: 'visible' }}>
+      {[0.25, 0.5, 0.75, 1].map(f => (
+        <polygon key={f}
+          points={ANGLES.map(a => pt(a, f)).map(p => p.join(',')).join(' ')}
+          fill="none" stroke="#dde0f8" strokeWidth="1"
+        />
+      ))}
+      {ANGLES.map((a, i) => (
+        <line key={i} x1={cx} y1={cy}
+          x2={cx + r * Math.cos(a)} y2={cy + r * Math.sin(a)}
+          stroke="#dde0f8" strokeWidth="1"
+        />
+      ))}
+      <polygon points={bgPts} fill="#eef0fb" stroke="none" />
+      <polygon points={dataPts} fill="rgba(107,126,232,0.45)" stroke="#6B7EE8" strokeWidth="1.5" />
+    </svg>
+  )
+}
+
+/* ── 진행 카드 ── */
+function getProgressDesc(rate) {
+  if (rate === 0)   return '이제 시작 단계네요, 지금 목표보다 시작해볼까요?'
+  if (rate === 100) return '목표를 전부 달성했습니다! 달성률 100%인 경우(6개 전부 완료)'
+  if (rate >= 50)   return `진행완료 항목 50%이상인 경우(절반 이상 완료)`
+  if (rate >= 10)   return `진행완료 항목 10% 이상인 경우(일부 완료)`
+  return '진행 시작! 조금씩 채워나가고 있어요'
+}
+
+function ProgressCard({ goal }) {
+  return (
+    <div className="dash-prog-item">
+      <span className="dash-prog-badge" style={{ background: goal.color }}>{goal.title}</span>
+      <div className="dash-prog-body">
+        <p className="dash-prog-desc">{getProgressDesc(goal.completion_rate)}</p>
+        <div className="dash-prog-bar-bg">
+          <div className="dash-prog-bar-fill"
+            style={{ width: `${goal.completion_rate}%`, background: goal.color }} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ════════════════════════════════
    메인 페이지
 ════════════════════════════════ */
-export default function MainPage({ user, onLogout, onStartAI }) {
+export default function MainPage({ user, onLogout, onStartAI, onStartDirect, hasPlanners = false }) {
   const [activeNav, setActiveNav] = useState('mandalart')
-  const [contentView, setContentView] = useState('empty') // 'empty' | 'create-options' | 'has-planners'
+  const [contentView, setContentView] = useState(hasPlanners ? 'has-planners' : 'empty')
   // TODO: 백엔드 배포 완료 후 useEffect로 plannerAPI.getUserPlanners 연동
   const name = user?.name || '사용자'
 
@@ -180,7 +356,7 @@ export default function MainPage({ user, onLogout, onStartAI }) {
     <div className="main-root">
       {/* ── 헤더 ── */}
       <header className="main-header">
-        <div className="main-header-logo">
+        <div className="main-header-logo" onClick={() => setContentView(hasPlanners ? 'has-planners' : 'empty')} style={{cursor:'pointer'}}>
           <img src={logoImg} className="main-header-logo-img" alt="육각형 프로젝트 로고" />
           <span className="main-header-logo-text">육각형 프로젝트</span>
         </div>
@@ -234,21 +410,21 @@ export default function MainPage({ user, onLogout, onStartAI }) {
         <nav className="sidebar-nav">
           <button
             className={`sidebar-nav-item${activeNav === 'mandalart' ? ' active' : ''}`}
-            onClick={() => setActiveNav('mandalart')}
+            onClick={() => { setActiveNav('mandalart'); if (hasPlanners) setContentView('mandalart-view') }}
           >
             <span className="sidebar-nav-icon"><IconGrid /></span>
             만다라트 연간 계획
           </button>
           <button
             className={`sidebar-nav-item${activeNav === 'schedule' ? ' active' : ''}`}
-            onClick={() => setActiveNav('schedule')}
+            onClick={() => { setActiveNav('schedule'); setContentView('schedule') }}
           >
             <span className="sidebar-nav-icon"><IconCalendar /></span>
             주요 일정
           </button>
           <button
             className={`sidebar-nav-item${activeNav === 'checklist' ? ' active' : ''}`}
-            onClick={() => setActiveNav('checklist')}
+            onClick={() => { setActiveNav('checklist'); setContentView('checklist') }}
           >
             <span className="sidebar-nav-icon"><IconCheck /></span>
             체크리스트
@@ -305,8 +481,74 @@ export default function MainPage({ user, onLogout, onStartAI }) {
               <li>자신에 대해 잘 알고 있다면 작성이 쉬울 수 있어요.</li>
               <li>언제든지 수정할 수 있어요.</li>
             </ul>
-            <button className="main-intro-start">시작</button>
+            <button className="main-intro-start" onClick={onStartDirect}>시작</button>
           </div>
+        )}
+
+        {contentView === 'has-planners' && (
+          <div className="main-dashboard">
+            {/* ── 좌측: 나의 종합 현황 ── */}
+            <div className="dash-card">
+              <p className="dash-card-title">나의 종합 현황</p>
+              <p className="dash-card-sub">나는 지금까지 얼마나 성장했을까요?</p>
+
+              <div className="dash-score-row">
+                <div className="dash-score-left">
+                  <p className="dash-score-label">총합 성장 점수 <span>Total score</span></p>
+                  <div className="dash-score-num">
+                    <span className="dash-score-val">88</span>
+                    <span className="dash-score-max">/ 100 점</span>
+                  </div>
+                  <p className="dash-score-diff">지난 달 대비 <strong>+15점</strong> 성장했어요</p>
+                </div>
+                <BarChart data={MOCK_MONTHLY} />
+              </div>
+
+              <div className="dash-radar-row">
+                <div>
+                  <p className="dash-radar-title">육각형 리포트 <span>Hexagon Report</span></p>
+                  <div className="dash-radar-legend">
+                    <span className="dash-legend-dot" style={{ background: '#6B7EE8' }} />자격증
+                    <span className="dash-legend-dot" style={{ background: '#C0C8F5', marginLeft: 8 }} />진행률
+                  </div>
+                </div>
+                <RadarChart goals={MOCK_MID_GOALS} size={160} />
+              </div>
+              <p className="dash-radar-diff">지난주 대비 <strong>+3.5%</strong> 성장했어요</p>
+            </div>
+
+            {/* ── 우측: 실시간 진행 현황 ── */}
+            <div className="dash-card">
+              <p className="dash-card-title">실시간 진행 현황</p>
+              <p className="dash-card-sub">드래그해서 순서 변경 가능</p>
+              <div className="dash-prog-list">
+                {MOCK_MID_GOALS.map((goal, i) => (
+                  <ProgressCard key={i} goal={goal} />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {(contentView === 'schedule' || contentView === 'checklist') && (
+          <div className="main-empty">
+            <p className="main-empty-text">
+              {contentView === 'schedule' ? '주요 일정' : '체크리스트'} 기능은 준비 중이에요.
+            </p>
+          </div>
+        )}
+
+        {contentView === 'mandalart-view' && (
+          <MandalartViewer onClose={() => setContentView('has-planners')} />
+        )}
+
+        {/* 프로젝트 추가 버튼 */}
+        {contentView === 'has-planners' && (
+          <button
+            className="main-add-btn"
+            onClick={() => setContentView('create-options')}
+            aria-label="프로젝트 추가"
+          >+</button>
         )}
       </main>
     </div>
